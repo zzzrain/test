@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <span>函数防抖：</span><input type="text" id="debounce">
+    <script>
+      // 函数防抖
+      function ajax(content) {
+        console.log('ajax request ' + content)
+      }
+      // function debounce(fun, delay) {
+      //   return function (args) {
+      //       let that = this
+      //       let _args = args
+      //       clearTimeout(fun.id)
+      //       fun.id = setTimeout(function () {
+      //           fun.call(that, _args)
+      //       }, delay)
+      //   }
+      // }
+      function debounce(ajax, content) {
+        clearTimeout(ajax.timer);
+        ajax.timer = setTimeout(function() {
+          ajax(content)
+        }, 1000)
+      }
+      let inputb = document.getElementById('debounce');
+      // let debounceAjax = debounce(ajax, 500)
+      inputb.addEventListener('keyup', function (e) {
+        // debounceAjax(e.target.value)
+        debounce(ajax, e.target.value)
+      })
+    </script>
+</body>
+</html>
