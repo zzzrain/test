@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="mvvm">
+        <input v-model="text" id="input"/>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
+
+<script>
+    var obj = {};
+
+    // 双向绑定简单实现
+    Object.defineProperty(obj, 'hello', {
+        get: function () {
+            console.log('调用get');
+        },
+        set: function (val) {
+            console.log('调用set');
+            document.getElementById('input').value = val;
+            document.getElementById('output').innerHTML = val;
+        }
+    });
+    document.getElementById('input').addEventListener('input', function (e) {
+        obj.hello = e.target.value;
+    });
+
+    // 虚拟节点
+    function nodeContainer(node, vm, flag){
+        var flag = flag || document.createDocumentFragment();
+        var child;
+        while(child = node.firstChild){
+            compile(child, vm);
+            flag.appendChild(child);
+            if(child.firstChild){
+                nodeContainer(child, vm, flag);
+            }
+        }
+        return flag;
+    }
+
+    // 编译
+    function compile(node, vm){
+        var reg = /\{\{(.*)\}\}/g;//匹配双绑的双大括号
+        if(node.nodeType === 1){
+            var attr = node.attributes;
+            //解析节点的属性
+            for(var i = 0;i < attr.length; i++){
+                if(attr[i].nodeName == 'v-model'){
+                    var name = attr[i].nodeValue;
+
+                    // 这里新添加的监听
+                    node.addEventListener('input',function(e){
+                        vm[name] = e.target.value;//改变实例里面的值
+                    });
+                    node.value = vm.data[name];//讲实例中的data数据赋值给节点
+                    node.removeAttribute('v-model');
+                }
+            }
+        }
+        //如果节点类型为text
+        if(node.nodeType === 3){
+            if(reg.test(node.nodeValue)){
+                // node.nodeValue = vm.data[RegExp.$1.trim()];
+                new Watcher(vm, node, RegExp.$1.trim());
+            }
+        }
+    }
+
+    // 响应
+    function defineReactive (obj, key, val){
+        //这里每一个vm的data属性值声明一个新的订阅者
+        var dep = new Dep();
+        Object.defineProperty(obj, key, {
+            get: function(){
+                // console.log(Dep.global);
+                //这里是第一次new对象Watcher的时候，初始化数据的时候，往订阅者对象里面添加对象。第二次后，就不需要再添加了
+                if (Dep.global){
+                    dep.add(Dep.global);
+                }
+                console.log("get了值--------- "+val);
+                return val;//获取到了值
+            },
+            set: function(newVal){
+                if(newVal === val){
+                    return;//如果值没变化，不用触发新值改变
+                }
+                val = newVal;//改变了值
+                console.log("set了值---------- "+val);
+                dep.notify();//触发了update()方法
+            }
+        })
+    }
+
+    // 遍历
+    function observe (obj, vm){
+        Object.keys(obj).forEach(function(key){
+            defineReactive(vm,key,obj[key]);
+        })
+    }
+
+    // 原型
+    function Vue(opt) {
+        this.data = opt.data;
+        observe(this.data, this); // 遍历数据
+        var id = opt.el;
+        var dom = nodeContainer(document.getElementById(id), this);
+        document.getElementById(id).appendChild(dom);
+    }
+
+    // 发布者
+    function Dep() {
+        this.subs = [];
+    }
+    Dep.prototype = {
+        add: function (sub) {
+            this.subs.push(sub);
+        },
+        notify: function () {
+            this.subs.forEach(function (ele) {
+                ele.update();
+            })
+        }
+    };
+
+    // 观察者
+    function Watcher(vm, node, name) {
+        Dep.global = this;//这里很重要！把自己赋值给Dep的全局变量
+        this.name = name;
+        this.node = node;
+        this.vm = vm;
+        this.update();
+        Dep.global = null;//这里update()完记得Dep的全局变量
+    }
+    Watcher.prototype = {
+        update: function () {
+            this.get();
+            switch (this.node.nodeType) {
+                case 1: this.node.value = this.value; break;
+                case 3: this.node.nodeValue = this.value; break;
+                default: break;
+            }
+        },
+        get: function () {
+            //这里把this的value值赋值，触发data的defineProperty方法中的get方法！
+            this.value = this.vm[this.name];
+        }
+    };
+
+    // var Demo = new Vue({
+    //     el: 'mvvm',
+    //     data: {
+    //         title: ' —— vue双向数据绑定原理',
+    //         text: 'hello world',
+    //     }
+    // });
+</script>
