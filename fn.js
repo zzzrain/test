@@ -7,8 +7,8 @@ function fn1(arr) {
     let idx = 0;
 
     arr.forEach(function (e, i) {
-        arr.forEach(function (e1, i1) {
-            arrTemp = arr.slice(i, i1+1);
+        arr.forEach(function (e1, j) {
+            arrTemp = arr.slice(i, j + 1);
             if (arrTemp.length) {
                 sumTemp.push(arrTemp);
             }

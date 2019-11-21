@@ -8,22 +8,27 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="button">
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-    </div>
+    <button>a</button>
+    <button>b</button>
+    <button>c</button>
+    <button>d</button>
     <script src="../jquery.js"></script>
     <script>
       // 闭包
-      let button = document.querySelector('.button');
-      for (let i = 0; i < button.children.length; i++) {
-          button.children[i].onclick = (function(){
+      var button = document.getElementsByTagName('button');
+
+      // for (var i = 0; i < button.length; i++) {
+      //     button[i].onclick = function () {
+      //         alert(i);
+      //     }
+      // }
+
+      for (var i = 0; i < button.length; i++) {
+          button[i].onclick = (function(i){
               return function () {
-                  console.log(this.value);
+                  alert(i);
               }
-          })(i)
+          })(i);
       }
     </script>
 </body>
