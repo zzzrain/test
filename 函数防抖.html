@@ -12,18 +12,10 @@
     <span>函数防抖：</span><input type="text" id="debounce">
   </div>
     <script>
+
       /**
        * 防抖
        * */
-      function snsCode(val) {
-        let regexp = /^\w{4}$/;
-        return regexp.test(val);
-      }
-
-      function handelAjax(val) {
-        console.log('ajax request ' + val)
-      }
-
       function debounce(fn, val, msg, time) {
         clearTimeout(fn.timer);
         fn.timer = setTimeout(function() {
@@ -33,6 +25,15 @@
             handelAjax(val);
           }
         }, time || 1000);
+      }
+
+      function snsCode(val) {
+        let regexp = /^\w{4}$/;
+        return regexp.test(val);
+      }
+
+      function handelAjax(val) {
+        console.log('ajax request ' + val)
       }
 
       let input = document.getElementById('debounce');
@@ -58,10 +59,10 @@
         }
       }
 
-      // 使用例子
       function pageScroll (e) {
         console.log(e, window.scrollY);
       }
+
       window.addEventListener('scroll', throttle(pageScroll));
 
     </script>
