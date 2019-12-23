@@ -1,7 +1,7 @@
 /**
   __proto__：对象的根属性，终点为null（这个属性串起了原型链）
   constructor：指针(来源)，所有函数（对象）终点为Function
-  prototype：函数实例化对象所具有的属性（对象属性的实际来源）
+  prototype：函数实例化对象所具有的属性（对象属性的实际来源，可手动添加）
 
   1、对象独有__proto__属性，函数独有prototype属性；
   2、对象由函数生成，函数是一种特殊的对象；
@@ -10,6 +10,7 @@
   5、生成对象时，对象的__proto__属性指向函数的prototype属性；
   6、对象本身不具备constructor属性，是通过函数的prototype继承过来；
 
+  参考文献：https://blog.csdn.net/cc18868876837/article/details/81211729
 */
 
 console.log('------基础测试------');
@@ -56,9 +57,11 @@ console.log(Function.prototype.__proto__ === Object.prototype);
 console.log(Object.prototype.__proto__);
 console.log(fn.__proto__.__proto__.__proto__);
 
-function Dio (name) { this.name = name }
+function Dio () {}
 let jo = new Dio('这个jo是Dio的一个实例');
-console.log(jo.name);
+Dio.prototype.say = 'ko no dio da';
+console.log(Dio.prototype.say);
+console.log(jo.__proto__.say);
 
 console.log('------__proto__------');
 console.log(jo.__proto__ === Dio.prototype);
