@@ -125,3 +125,4 @@ class Game extends React.Component {
 
 // ReactDOM记住：组件开头大写
 ReactDOM.render(<Game />, document.getElementById("root"));
+
