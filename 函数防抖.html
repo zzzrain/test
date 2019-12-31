@@ -49,14 +49,13 @@
         return function () {
           if (!lock) {
             return;
-          } else {
-            lock = false
           }
+          lock = false;
           setTimeout(() => {
             fn.apply(this, arguments);
             lock = true;
-          }, time || 1000)
-        }
+          }, time || 1000);
+        };
       }
 
       function pageScroll (e) {
