@@ -67,12 +67,15 @@ console.log('-----sortPlus-----', sortPlus);
 
 
 let forEach = [];
+
 arrPlus.forEach(function (i) {
   forEach.push(i);
 });
+
 let map = arrPlus.map(function (i) {
   return `<p>${i}</p>>`;
 });
+
 let filter = arrPlus.filter(function (i) {
   return i === 2;
 });

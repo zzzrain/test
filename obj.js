@@ -1,4 +1,16 @@
-// 对象复制(es6)
+// 对象深拷贝
+let obj = {
+    a:1,
+    b:2,
+    c:3,
+};
+let lbj = {};
+for (let key in obj) {
+    lbj[key] = obj[key]
+}
+console.log(lbj, lbj === obj);
+
+// es6深拷贝
 const defaultOpt = {
     title: {
         text: 'hello world',
@@ -12,15 +24,3 @@ const opt = Object.assign({}, defaultOpt, {
     }
 });
 console.log(opt, opt === defaultOpt);
-
-// 对象复制
-let obj = {
-    a:1,
-    b:2,
-    c:3,
-};
-let lbj = {};
-for (let key in obj) {
-    lbj[key] = obj[key]
-}
-console.log(lbj, lbj === obj);

@@ -1,39 +1,40 @@
 /**
-  __proto__：对象的根属性，终点为null（这个属性串起了原型链）
-  constructor：指针(来源)，所有函数（对象）终点为Function
-  prototype：函数实例化对象所具有的属性（对象属性的实际来源，可手动添加）
+  __proto__：浏览器私有属性，对象的根属性，终点为null（这个属性串起了原型链）
+  constructor：构造函数(指针)，所有函数（对象）终点为Function
+  prototype：原型对象，函数实例化对象所具有的属性（对象属性的实际来源，可手动添加）
 
-  1、对象独有__proto__属性，函数独有prototype属性；
-  2、对象由函数生成，函数是一种特殊的对象；
+  1、对象独有__proto__和constructor属性，函数独有prototype属性；
+  2、对象由函数生成，函数是一种特殊的对象，也有__proto__和constructor；
   3、对象的__proto__属性的终点即为原型链的终点null；
-  4、对象（函数）constructor的终点为Function；
-  5、生成对象时，对象的__proto__属性指向函数的prototype属性；
-  6、对象本身不具备constructor属性，是通过函数的prototype继承过来；
+  4、对象本身不具备constructor属性，是通过函数的prototype继承过来；
+  5、对象（函数）constructor的终点为Function；
+  6、生成对象时，对象的__proto__属性指向函数的prototype属性；
 
-  参考文献：https://blog.csdn.net/cc18868876837/article/details/81211729
+  参考：https://blog.csdn.net/cc18868876837/article/details/81211729
 */
 
 console.log('------基础测试------');
+console.log(typeof Object, typeof Object(), typeof Function, typeof Function());
+console.log(Object.__proto__.__proto__.__proto__, Function.__proto__.__proto__.__proto__);
 console.log(Object.__proto__, Function.__proto__);
+console.log(Object.constructor, Function.constructor);
 console.log(Object.prototype, Function.prototype);
-console.log(Object.__proto__ === Object.prototype);
 console.log(Object.__proto__ === Function.prototype);
-console.log(Function.__proto__ === Object.prototype);
 console.log(Function.__proto__ === Function.prototype);
 console.log(Object.constructor === Function.constructor);
 
 let obj = { name: '这是对象' };
 console.log('------对象------');
-console.log(obj.constructor === Object, Object.constructor === Function);
 console.log(obj.__proto__ === Object.prototype);
 console.log(obj.__proto__ === Function.prototype);
+console.log(obj.constructor === Object, Object.constructor === Function);
 console.log(obj.prototype);
 
 let fn = function () { return '这是函数' };
 console.log('------函数------');
-console.log(fn.constructor === Function, Function.constructor === Function);
 console.log(fn.__proto__ === Object.prototype);
 console.log(fn.__proto__ === Function.prototype);
+console.log(fn.constructor === Function, Function.constructor === Function);
 console.log(fn.prototype, typeof fn.prototype);
 console.log((fn.prototype).__proto__ === Object.prototype);
 console.log((fn.prototype).constructor === fn);
